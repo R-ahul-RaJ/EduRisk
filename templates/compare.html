@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compare Student Progress</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>EduRisk</h1>
+
+    <p>Student Performance Risk Prediction using ML & Explainable AI</p>
+
+    <h2>Student Progress Comparison</h2>
+
+    <form method="POST" action="/compare">
+
+    <div class="form-group">
+        <label>Student ID</label>
+        <input type="text" name="student_id" required>
+    </div>
+
+    <br>
+
+    <button type="submit">Compare Student</button>
+    </form>
+
+    {% if no_records %}
+    <div class="warning-box">
+        No prediction records found for Student ID:
+        <strong>{{ student_id }}</strong>
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <p><strong>{{ message }}</strong></p>
+    {% endif %}
+
+    {% if rows %}
+
+    <h3>Prediction Records for {{ student_id }}</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Date</th>
+            <th>Prediction</th>
+            <th>Confidence</th>
+        </tr>
+
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.Prediction_Time }}</td>
+            <td>{{ row.Prediction_Result }}</td>
+            <td>{{ row.Confidence }}%</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    {% if comparison %}
+
+    <hr>
+
+    <h3>Performance Comparison</h3>
+
+    <div class="comparison-cards">
+
+            <div class="comparison-card
+            {% if comparison.previous_result == 'At Risk' %}
+            risk-card
+            {% else %}
+            safe-card
+            {% endif %}">
+            <h4>Previous Prediction</h4>
+            <h3>{{ comparison.previous_result }}</h3>
+            <p>{{ comparison.previous_confidence }}%</p>
+        </div>
+
+        <div class="comparison-card
+        {% if comparison.latest_result == 'At Risk' %}
+        risk-card
+        {% else %}
+        safe-card
+        {% endif %}">
+            <h4>Latest Prediction</h4>
+            <h3>{{ comparison.latest_result }}</h3>
+            <p>{{ comparison.latest_confidence }}%</p>
+        </div>
+
+    </div>
+
+    <div class="analysis-box">
+        <h4>Comparison Summary</h4>
+        <p><strong>Confidence Change:</strong>
+            <span class="{{ comparison.confidence_class }}">
+                {{ comparison.confidence_change_display }}
+            </span>
+        </p>
+        <p><strong>Analysis:</strong>
+        {{ comparison.analysis }}</p>
+    </div>
+
+    <h4 class="section-title">Top Changes Detected</h4>
+    <div class="changes-box">
+        <ul>
+        {% for change in comparison.top_changes %}
+            <li>
+                <strong>{{ change.feature }}</strong>:
+                {{ change.old }} → {{ change.new }}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% endif %}
+    <br>
+
+    <a href="/">← Back to Prediction Page</a>
+
+    <br><br>
+</div>
+
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+
+    const btn = document.getElementById("theme-btn");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        btn.innerHTML = "☀️ Light Mode";
+    } else {
+        localStorage.setItem("theme", "light");
+        btn.innerHTML = "🌙 Dark Mode";
+    }
+}
+
+window.onload = function() {
+    const savedTheme = localStorage.getItem("theme");
+    const btn = document.getElementById("theme-btn");
+
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        btn.innerHTML = "☀️ Light Mode";
+    }
+}
+</script>
+
+</body>
+</html>

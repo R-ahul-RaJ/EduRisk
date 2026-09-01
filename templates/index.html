@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduRisk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <button onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+    <h1>EduRisk</h1>
+    <p>Student Performance Risk Prediction using ML & Explainable AI</p>
+
+    {% if not prediction %}
+    <form method="POST" action="/predict">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Student ID</label>
+                <input type="text" name="student_id" required>
+            </div>
+            <div class="form-group">
+                <label>Hours Studied (1–50 hours/week)</label>
+                <input type="number" name="Hours_Studied" min="1" max="50" required>
+            </div>
+            <div class="form-group">
+                <label>Attendance (0–100 %)</label>
+                <input type="number" name="Attendance" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label>Parental Involvement:</label>
+                <select name="Parental_Involvement">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Access to Resources:</label>
+                <select name="Access_to_Resources">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Extracurricular Activities:</label>
+                <select name="Extracurricular_Activities">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sleep Hours (4–12 hours/day)</label>
+                <input type="number" name="Sleep_Hours" min="4" max="12" required>
+            </div>
+            <div class="form-group">
+                <label>Previous Scores (0–100 marks)</label>
+                <input type="number" name="Previous_Scores" min="0" max="100" required>
+            </div>
+
+            <div class="form-group">
+                <label>Motivation Level:</label>
+                <select name="Motivation_Level">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Internet Access:</label>
+                <select name="Internet_Access">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tutoring Sessions (0–10 sessions/month)</label>
+                <input type="number" name="Tutoring_Sessions" min="0" max="10" required>
+            </div>
+            <div class="form-group">
+                <label>Family Income:</label>
+                <select name="Family_Income">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Teacher Quality:</label>
+                <select name="Teacher_Quality">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>School Type:</label>
+                <select name="School_Type">
+                    <option value="0">Private</option>
+                    <option value="1">Public</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Peer Influence:</label>
+                <select name="Peer_Influence">
+                    <option value="0">Negative</option>
+                    <option value="1">Neutral</option>
+                    <option value="2">Positive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Physical Activity (0–10 hours/week)</label>
+                <input type="number" name="Physical_Activity" min="0" max="10" required>
+            </div>
+            <div class="form-group">
+                <label>Learning Disabilities:</label>
+                <select name="Learning_Disabilities">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Parental Education Level:</label>
+                <select name="Parental_Education_Level">
+                    <option value="0">College</option>
+                    <option value="1">High School</option>
+                    <option value="2">Postgraduate</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Distance from Home:</label>
+                <select name="Distance_from_Home">
+                    <option value="0">Near</option>
+                    <option value="1">Moderate</option>
+                    <option value="2">Far</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <select name="Gender">
+                    <option value="0">Female</option>
+                    <option value="1">Male</option>
+                </select>
+            </div>
+        </div>
+
+        <br>
+        <button type="submit">Predict Risk</button>
+        <br><br>
+        <a href="/history">View Prediction History</a>
+        &nbsp;&nbsp;&nbsp;
+
+        <a href="/compare">Compare Student</a>
+
+    </form>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="result-box">
+        <h2>
+            Prediction:
+            <span class="{% if prediction == 'At Risk' %}risk-text{% else %}safe-text{% endif %}">
+            {{ prediction }}
+            </span>
+        </h2>
+        <h3>Confidence: {{ confidence }}%</h3>
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ confidence }}%;">
+                {{ confidence }}%
+            </div>
+        </div>
+    </div>
+
+
+    {% if shap_plot %}
+        <h3 class="section-title">Prediction Explanation (Feature Impact Analysis)</h3>
+        <img src="{{ url_for('static', filename='shap_plot.png') }}" style="max-width:100%;">
+    {% endif %}
+
+
+    {% if risk_factors or protective_factors %}
+    <div class="explanation-container">
+
+        <div class="risk-box">
+            <h3>Factors Increasing Risk</h3>
+            <ul>
+                {% for factor in risk_factors %}
+                    <li>{{ factor }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="safe-box">
+            <h3>Factors Reducing Risk</h3>
+            <ul>
+                {% for factor in protective_factors %}
+                    <li>{{ factor }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    </div>
+    <div class="action-buttons">
+        <a href="/" class="new-btn">New Prediction</a>
+        <a href="/history" class="history-btn">View Prediction History</a>
+        <a href="/compare" class="history-btn">Compare Student</a>
+        <a href="/download_report" class="download-btn">Download Prediction Report</a>
+    {% endif %}
+</div>
+</div>
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+
+    const btn = document.getElementById("theme-btn");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        btn.innerHTML = "☀️ Light Mode";
+    } else {
+        localStorage.setItem("theme", "light");
+        btn.innerHTML = "🌙 Dark Mode";
+    }
+}
+
+window.onload = function() {
+    const savedTheme = localStorage.getItem("theme");
+    const btn = document.getElementById("theme-btn");
+
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        btn.innerHTML = "☀️ Light Mode";
+    }
+}
+</script>
+</body>
+</html>
