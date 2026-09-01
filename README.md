@@ -81,18 +81,15 @@ EduRisk/
 
 ### 1. Clone the repository
 
-```bash
-git clone https://github.com/YOUR_USERNAME/EduRisk.git
-cd EduRisk
+    git clone https://github.com/R-ahul-RaJ/EduRisk.git
+    cd EduRisk
 
 ### 2. Install the required dependencies
 
-```bash
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 ### 3. Run the Flask application
 
-```bash
-python app.py
+    python app.py
 
 Open the local URL displayed in the terminal in your web browser.
