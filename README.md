@@ -1,4 +1,4 @@
-# EduRisk – Student Performance Risk Prediction using ML & XAI
+# EduRisk – Student Performance Risk Prediction using Machine Learning & XAI
 
 EduRisk is a machine learning-based student performance risk prediction system developed to identify students who may be academically at risk based on various student-related factors.
 
@@ -6,14 +6,12 @@ The project combines Machine Learning with Explainable AI (XAI) to provide predi
 
 ## Project Overview
 
-The system uses the **Student Performance Factors** dataset to analyze different factors that can influence student performance and classify students into two categories:
+The system uses the Student Performance Factors dataset to analyze different factors that can influence student performance and classify students into two categories:
 
-- **At Risk**
-- **Not At Risk**
+- At Risk
+- Not At Risk
 
-A performance score threshold of **70** is used for risk classification.
-
-The trained machine learning model is integrated into a **Flask web application**, allowing users to enter student information and receive a predicted risk category through an interactive web interface.
+The trained machine learning model is integrated into a Flask web application, allowing users to enter student information and receive a predicted risk category through an interactive web interface.
 
 ## Key Features
 
@@ -25,8 +23,6 @@ The trained machine learning model is integrated into a **Flask web application*
 - Explainable AI (XAI)
 - Interactive Flask web application
 - User-based prediction interface
-- Compare Prediction Records
-- PDF Report Generation
 
 ## Technologies Used
 
@@ -44,7 +40,7 @@ The trained machine learning model is integrated into a **Flask web application*
 
 ## Dataset
 
-The project uses the **Student Performance Factors** dataset.
+The project uses the Student Performance Factors dataset.
 
 The dataset contains information related to various factors affecting student performance, including:
 
@@ -64,18 +60,16 @@ The dataset contains information related to various factors affecting student pe
 
 ## Project Structure
 
-```text
-EduRisk/
-│
-├── Models/                         # Trained machine learning models
-├── static/                         # Static files for the web application
-├── templates/                      # HTML templates for the Flask application
-├── app.py                          # Flask application
-├── StudentPerformanceFactors.csv   # Dataset
-├── StudentRisk.ipynb               # Model development and analysis
-├── requirements.txt                # Python dependencies
-├── .gitignore
-└── README.md
+    EduRisk/
+    ├── Models/                         # Trained machine learning models
+    ├── static/                         # Static files for the web application
+    ├── templates/                      # HTML templates for the Flask application
+    ├── app.py                          # Flask application
+    ├── StudentPerformanceFactors.csv   # Dataset
+    ├── StudentRisk.ipynb               # Model development and analysis
+    ├── requirements.txt                # Python dependencies
+    ├── .gitignore
+    └── README.md
 
 ## Running the Project Locally
 
@@ -93,3 +87,11 @@ EduRisk/
     python app.py
 
 Open the local URL displayed in the terminal in your web browser.
+
+## Project Objective
+
+The primary objective of EduRisk is to use machine learning to identify students who may be academically at risk and provide interpretable predictions that can help users understand the factors associated with student performance.
+
+## Academic Project
+
+EduRisk was developed as a postgraduate academic project focused on Machine Learning and Explainable AI (XAI) for student performance risk prediction.
